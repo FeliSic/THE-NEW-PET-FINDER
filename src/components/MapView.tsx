@@ -1,6 +1,8 @@
+// src/components/MapView.tsx
 "use client";
 
-import { MapContainer, TileLayer, Circle, Popup } from "react-leaflet";
+import { useEffect, useRef } from "react";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 interface MapViewProps {
@@ -17,37 +19,47 @@ export default function MapView({
   petName,
   radiusMeters = 400,
 }: MapViewProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const map = L.map(el, { scrollWheelZoom: false }).setView([lat, lng], 15);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+
+    const circle = L.circle([lat, lng], {
+      radius: radiusMeters,
+      color: "#4f46e5",
+      fillColor: "#4f46e5",
+      fillOpacity: 0.2,
+    }).addTo(map);
+
+    // Nodos DOM con textContent: petName es texto del usuario y bindPopup
+    // con un string lo interpretaría como HTML (XSS)
+    const popup = document.createElement("div");
+    popup.style.textAlign = "center";
+    const name = document.createElement("strong");
+    name.textContent = petName;
+    const note = document.createElement("div");
+    note.style.fontSize = "12px";
+    note.textContent = "Zona aproximada del reporte";
+    popup.append(name, note);
+    circle.bindPopup(popup);
+
+    return () => {
+      map.remove();
+    };
+  }, [lat, lng, petName, radiusMeters]);
+
   return (
-    <div className="relative z-0 h-125 w-full overflow-hidden rounded-lg border border-gray-200">
-      <MapContainer
-        center={[lat, lng]}
-        zoom={15}
-        scrollWheelZoom={false} // que la rueda siga scrolleando la página
-        style={{ height: "100%", width: "100%" }}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <Circle
-          center={[lat, lng]}
-          radius={radiusMeters}
-          pathOptions={{
-            color: "#4f46e5",
-            fillColor: "#4f46e5",
-            fillOpacity: 0.2,
-          }}
-        >
-          <Popup>
-            <div className="text-center">
-              <p className="font-bold text-indigo-700">{petName}</p>
-              <p className="text-xs text-gray-600">
-                Zona aproximada del reporte
-              </p>
-            </div>
-          </Popup>
-        </Circle>
-      </MapContainer>
-    </div>
+    <div
+      ref={containerRef}
+      className="relative z-0 h-125 w-full overflow-hidden rounded-lg border border-gray-200"
+    />
   );
 }
