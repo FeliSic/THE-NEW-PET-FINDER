@@ -1,71 +1,103 @@
 // src/components/LocationPicker.tsx
 "use client";
 
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import { useEffect, useRef } from "react";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Fix para los iconos de Leaflet en Next.js
-import L from "leaflet";
-delete (L.Icon.Default.prototype as { _getIconUrl?: unknown })._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-  iconUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-  shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-});
+type Location = { lat: number; lng: number };
 
 interface LocationPickerProps {
-  value: { lat: number; lng: number } | null;
-  onChange: (location: { lat: number; lng: number }) => void;
+  value: Location | null;
+  onChange: (location: Location) => void;
 }
 
-function MapClickHandler({
-  onLocationSelect,
-}: {
-  onLocationSelect: (lat: number, lng: number) => void;
-}) {
-  useMapEvents({
-    click(e) {
-      onLocationSelect(e.latlng.lat, e.latlng.lng);
-    },
-  });
-  return null;
-}
+// Centro inicial en 9 de Julio, Buenos Aires
+const DEFAULT_CENTER: [number, number] = [-35.4454, -60.88];
 
 export default function LocationPicker({
   value,
   onChange,
 }: LocationPickerProps) {
-  // Centro inicial en 9 de Julio, Buenos Aires
-  const defaultCenter: [number, number] = [-35.4454, -60.88];
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const markerRef = useRef<L.CircleMarker | null>(null);
+  const onChangeRef = useRef(onChange);
+  const initialValueRef = useRef(value);
+
+  const lat = value?.lat;
+  const lng = value?.lng;
+
+  // El click handler siempre llama a la última versión de onChange
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  // Crea el mapa al montar y lo destruye al desmontar (o al ocultarse la página)
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const initial = initialValueRef.current;
+    const map = L.map(el, { scrollWheelZoom: false }).setView(
+      initial ? [initial.lat, initial.lng] : DEFAULT_CENTER,
+      13,
+    );
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+
+    map.on("click", (e: L.LeafletMouseEvent) => {
+      onChangeRef.current({ lat: e.latlng.lat, lng: e.latlng.lng });
+    });
+
+    mapRef.current = map;
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+      markerRef.current = null;
+    };
+  }, []);
+
+  // Sincroniza el marcador con el valor del form
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    if (lat == null || lng == null) {
+      markerRef.current?.remove();
+      markerRef.current = null;
+      return;
+    }
+
+    if (markerRef.current) {
+      markerRef.current.setLatLng([lat, lng]);
+    } else {
+      markerRef.current = L.circleMarker([lat, lng], {
+        radius: 9,
+        color: "#ffffff",
+        weight: 3,
+        fillColor: "#4f46e5",
+        fillOpacity: 1,
+      }).addTo(map);
+    }
+  }, [lat, lng]);
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <p className="text-sm text-gray-600">
         📍 Hacé clic en el mapa para ubicar a la mascota
-      </label>
-      <div className="border rounded-lg overflow-hidden h-80">
-        <MapContainer
-          center={value ? [value.lat, value.lng] : defaultCenter}
-          zoom={13}
-          style={{ height: "100%", width: "100%" }}
-          scrollWheelZoom={false}
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <MapClickHandler
-            onLocationSelect={(lat, lng) => onChange({ lat, lng })}
-          />
-          {value && <Marker position={[value.lat, value.lng]} />}
-        </MapContainer>
-      </div>
-      {value && (
+      </p>
+      <div
+        ref={containerRef}
+        className="relative z-0 h-80 overflow-hidden rounded-lg border"
+      />
+      {lat != null && lng != null && (
         <p className="text-xs text-gray-500">
-          Ubicación seleccionada: {value.lat.toFixed(6)}, {value.lng.toFixed(6)}
+          Ubicación seleccionada: {lat.toFixed(6)}, {lng.toFixed(6)}
         </p>
       )}
     </div>
