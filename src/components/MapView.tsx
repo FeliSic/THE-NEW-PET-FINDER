@@ -9,7 +9,8 @@ interface MapViewProps {
   lat: number;
   lng: number;
   petName: string;
-  // Mismo valor que usa obfuscateCoordinates al crear el reporte
+  // Radio del círculo que se dibuja. Tiene que ser mayor que el desplazamiento
+  // de obfuscateCoordinates (400 m) para que el punto real quede adentro
   radiusMeters?: number;
 }
 
@@ -17,7 +18,7 @@ export default function MapView({
   lat,
   lng,
   petName,
-  radiusMeters = 400,
+  radiusMeters = 700,
 }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -25,7 +26,12 @@ export default function MapView({
     const el = containerRef.current;
     if (!el) return;
 
-    const map = L.map(el, { scrollWheelZoom: false }).setView([lat, lng], 15);
+    // Zoom dinamico calculado a travez del radio del círculo que se dibuja.
+    // Se ajusta a la vista para que el círculo quede centrado y visible en cualquier tamaño de pantalla.
+    const map = L.map(el, { scrollWheelZoom: false });
+    map.fitBounds(L.latLng(lat, lng).toBounds(radiusMeters * 2), {
+      padding: [16, 16],
+    });
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
