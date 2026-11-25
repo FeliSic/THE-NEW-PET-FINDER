@@ -9,7 +9,7 @@ import { uploadImageToCloudinary } from "@/lib/cloudinary";
 import { obfuscateCoordinates } from "@/lib/geoUtils";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
+import { MAX_ACTIVE_REPORTS_PER_USER } from "@/lib/report-limits";
 const MAX_REPORTS_PER_HOUR = 5;
 
 // Valida que sea una imagen real, la achica y elimina el EXIF (GPS incluido)
@@ -73,7 +73,14 @@ export async function createReport(formData: FormData) {
       error: "Creaste muchos reportes en poco tiempo. Probá más tarde.",
     };
   }
-
+  const activeCount = await prisma.report.count({
+    where: { userId, status: "ACTIVE" },
+  });
+  if (activeCount >= MAX_ACTIVE_REPORTS_PER_USER) {
+    return {
+      error: `Ya tenés ${MAX_ACTIVE_REPORTS_PER_USER} reportes activos. Marcá alguno como resuelto antes de crear otro.`,
+    };
+  }
   const cleanImage = await sanitizeImage(data.image);
   if (!cleanImage) {
     return { error: "El archivo no es una imagen válida" };
