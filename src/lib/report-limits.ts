@@ -1,0 +1,1 @@
+export const MAX_ACTIVE_REPORTS_PER_USER = 10;
