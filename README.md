@@ -14,6 +14,7 @@ Pet Finder es una plataforma full-stack diseñada para facilitar el reporte y la
 🛠️ TECH STACK ----------------------------------------------------------------
 
 Categoría y Tecnologías
+
 Framework 
 Next.js 16 (App Router, Turbopack, Server Actions)
 
