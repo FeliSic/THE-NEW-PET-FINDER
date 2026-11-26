@@ -13,16 +13,33 @@ Pet Finder es una plataforma full-stack diseñada para facilitar el reporte y la
 
 🛠️ TECH STACK ----------------------------------------------------------------
 
-Categoría      Tecnologías
-Framework      Next.js 16 (App Router, Turbopack, Server Actions)
-Lenguaje       TypeScript (Estricto)
-Base de Datos  PostgreSQL (NeonDB Serverless) + Prisma ORM 7
-Estilos        Tailwind CSS 4 + shadcn/ui (Radix UI)
-Formularios    React Hook Form + Zod (Validación end-to-end)
-Autenticación  Auth.js (NextAuth) v5
-Mapas          Leaflet + React-Leaflet
-Almacenamiento Cloudinary (Imágenes)
-Utilidades     bcryptjs, lucide-react, date-fns (o Intl)
+Categoría y Tecnologías
+Framework 
+Next.js 16 (App Router, Turbopack, Server Actions)
+
+Lenguaje       
+TypeScript (Estricto)
+
+Base de Datos 
+PostgreSQL (NeonDB Serverless) + Prisma ORM 7
+
+Estilos        
+Tailwind CSS 4 + shadcn/ui (Radix UI)
+
+Formularios   
+React Hook Form + Zod (Validación end-to-end)
+
+Autenticación 
+Auth.js (NextAuth) v5
+
+Mapas          
+Leaflet + React-Leaflet
+
+Almacenamiento 
+Cloudinary (Imágenes)
+
+Utilidades     
+bcryptjs, lucide-react, date-fns (o Intl)
 
 🏗️ Decisiones de Arquitectura y Seguridad ----------------------------------------------------------------
 
