@@ -31,13 +31,6 @@ const dateFormatter = new Intl.DateTimeFormat("es-AR", {
   timeZone: "America/Argentina/Buenos_Aires",
 });
 
-const moneyFormatter = new Intl.NumberFormat("es-AR", {
-  style: "currency",
-  currency: "ARS",
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 2,
-});
-
 async function logout() {
   "use server";
   await signOut({ redirectTo: "/login" });
@@ -327,15 +320,6 @@ function ReportCard({
             {report.contactInfo}
           </span>
         </div>
-
-        {report.reward && (
-          <div className="rounded-md bg-green-50 p-2 text-center text-sm font-semibold text-green-700">
-            💰 Recompensa:{" "}
-            {report.rewardAmount != null && Number(report.rewardAmount) > 0
-              ? moneyFormatter.format(Number(report.rewardAmount))
-              : "Sí"}
-          </div>
-        )}
       </CardContent>
 
       <CardFooter className="flex flex-col gap-2 border-t bg-gray-50/50 pt-3">
