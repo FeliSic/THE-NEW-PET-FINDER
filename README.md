@@ -113,7 +113,7 @@ Panel de administración básico para moderación de contenido.
 Soporte para PWA (Progressive Web App) para instalación en móviles.
 
 
-👨‍💻 AUTOR ----------------------------------------------------------------
+👨‍💻 AUTOR -----------------------------------------------------------------
 
 FeliSic
 www.linkedin.com/in/felipe-sicca | [GitHub](https://github.com/FeliSic) | https://landing-page-presentation-azure.vercel.app/
