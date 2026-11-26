@@ -114,5 +114,6 @@ Soporte para PWA (Progressive Web App) para instalación en móviles.
 
 
 👨‍💻 AUTOR ----------------------------------------------------------------
+
 FeliSic
 www.linkedin.com/in/felipe-sicca | [GitHub](https://github.com/FeliSic) | https://landing-page-presentation-azure.vercel.app/
