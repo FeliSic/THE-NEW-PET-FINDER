@@ -1,4 +1,4 @@
-📖 SOBRE EL PROYECTO ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+📖 SOBRE EL PROYECTO ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Pet Finder es una plataforma full-stack diseñada para facilitar el reporte y la búsqueda de mascotas. Prioriza la seguridad del usuario mediante la ofuscación de coordenadas, la validación estricta de datos y una experiencia de usuario (UX) fluida, permitiendo el contacto directo vía WhatsApp o Email.
 
@@ -11,7 +11,7 @@ Pet Finder es una plataforma full-stack diseñada para facilitar el reporte y la
 🛡️ Seguridad y Anti-Spam: Validación de esquemas con Zod (cliente y servidor), hashing de contraseñas con bcryptjs, y límites de tasa (rate limiting) para prevenir creación masiva de reportes.
 📱 UX Inteligente: Detección automática de formato de contacto (Email vs. Teléfono argentino) para abrir el cliente de correo o WhatsApp directamente.
 
-🛠️ TECH STACK ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+🛠️ TECH STACK ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Categoría      Tecnologías
 Framework      Next.js 16 (App Router, Turbopack, Server Actions)
@@ -24,7 +24,7 @@ Mapas          Leaflet + React-Leaflet
 Almacenamiento Cloudinary (Imágenes)
 Utilidades     bcryptjs, lucide-react, date-fns (o Intl)
 
-🏗️ Decisiones de Arquitectura y Seguridad ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+🏗️ Decisiones de Arquitectura y Seguridad ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 1. Privacidad por Diseño (Coordinate Obfuscation): Las coordenadas reales (realLat, realLng) se guardan en la BD, pero la UI y las consultas públicas solo reciben publicLat y publicLng, calculadas con un algoritmo de desplazamiento aleatorio de ~400 metros.
 
@@ -37,7 +37,7 @@ Utilidades     bcryptjs, lucide-react, date-fns (o Intl)
 5. Manejo de Estados de Carga: Uso de useFormStatus y componentes de esqueleto (Suspense fallback) para proporcionar feedback visual inmediato sin bloquear el hilo principal.
 
 
-🚀 EJECUCIÓN LOCAL -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+🚀 EJECUCIÓN LOCAL ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Prerrequisitos
 
@@ -60,14 +60,14 @@ Pasos de instalación
 
 Crea un archivo .env en la raíz del proyecto y completa los valores:
 
-   # Base de Datos (NeonDB)
+   Base de Datos (NeonDB)
    DATABASE_URL="postgresql://user:password@ep-xxx.us-east-2.aws.neon.tech/neondb?sslmode=require"
 
-   # NextAuth v5
+   NextAuth v5
    AUTH_SECRET="tu_clave_secreta_generada_con_crypto_randomBytes"
    NEXTAUTH_URL="http://localhost:3000"
 
-   # Cloudinary
+   Cloudinary
    CLOUDINARY_CLOUD_NAME="tu_cloud_name"
    CLOUDINARY_API_KEY="tu_api_key"
    CLOUDINARY_API_SECRET="tu_api_secret"
@@ -84,7 +84,7 @@ Crea un archivo .env en la raíz del proyecto y completa los valores:
    Abre http://localhost:3000 en tu navegador.
 
 
-📂 ESTRUCTURA DEL PROYECTO (RESUMEN) -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+📂 ESTRUCTURA DEL PROYECTO (RESUMEN) ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ├── prisma/
 │   ├── schema.prisma        # Modelo de datos e índices optimizados
@@ -105,7 +105,7 @@ Crea un archivo .env en la raíz del proyecto y completa los valores:
 │   └── types/               # Extensiones de tipos (ej. next-auth.d.ts)
 └── .env                     # Variables de entorno (No versionado)
 
-🔮 PRÓXIMAS MEJORAS (ROADMAP) ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+🔮 PRÓXIMAS MEJORAS (ROADMAP) ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Implementar notificaciones por email (Resend) cuando alguien contacta sobre un reporte.
 Agregar filtrado avanzado en el dashboard (por especie, tipo, fecha).
@@ -113,6 +113,6 @@ Panel de administración básico para moderación de contenido.
 Soporte para PWA (Progressive Web App) para instalación en móviles.
 
 
-👨‍💻 AUTOR ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+👨‍💻 AUTOR ------------------------------------------------------------------------------------------------------------------------------------------------------------
 FeliSic
-www.linkedin.com/in/felipe-sicca | GitHub | https://landing-page-presentation-azure.vercel.app/
+www.linkedin.com/in/felipe-sicca | [GitHub](https://github.com/FeliSic) | https://landing-page-presentation-azure.vercel.app/
