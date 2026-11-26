@@ -44,7 +44,6 @@ export default function NewReportPage() {
     defaultValues: { reward: false },
   });
 
-  const rewardEnabled = useWatch({ control, name: "reward" });
   const lat = useWatch({ control, name: "lat" });
   const lng = useWatch({ control, name: "lng" });
 
@@ -68,10 +67,6 @@ export default function NewReportPage() {
       formData.append("lng", data.lng.toString());
       formData.append("contactInfo", data.contactInfo);
       if (data.locationRef) formData.append("locationRef", data.locationRef);
-      formData.append("reward", data.reward ? "on" : "off");
-      if (data.reward && data.rewardAmount) {
-        formData.append("rewardAmount", data.rewardAmount);
-      }
       formData.append("image", data.image);
 
       try {
@@ -256,42 +251,6 @@ export default function NewReportPage() {
                   </p>
                 )}
               </div>
-
-              {/* Recompensa */}
-              <div className="flex items-center space-x-2 pt-2">
-                <input
-                  type="checkbox"
-                  id="reward"
-                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                  disabled={isPending}
-                  {...register("reward")}
-                />
-                <Label htmlFor="reward" className="cursor-pointer">
-                  Ofrezco recompensa
-                </Label>
-              </div>
-
-              {rewardEnabled && (
-                <div className="space-y-2 pl-6">
-                  <Label htmlFor="rewardAmount">
-                    Monto de la recompensa (Opcional)
-                  </Label>
-                  <Input
-                    id="rewardAmount"
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    placeholder="Ej: 5000"
-                    disabled={isPending}
-                    {...register("rewardAmount")}
-                  />
-                  {errors.rewardAmount && (
-                    <p className="text-sm text-red-600">
-                      {errors.rewardAmount.message}
-                    </p>
-                  )}
-                </div>
-              )}
 
               {/* Botón de envío */}
               <Button
